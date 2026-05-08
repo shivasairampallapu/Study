@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LearnQuest AI — Level Up Your Learning</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  :root {
+    --bg: #030712;
+    --bg2: #0a0f1e;
+    --bg3: #0d1526;
+    --card: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(99,179,237,0.2);
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --accent: #38bdf8;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #fb923c;
+    --danger: #f87171;
+    --gold: #fbbf24;
+    --neon: #00ff88;
+    --font-display: 'Orbitron', monospace;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+  }
+  .light {
+    --bg: #f0f4ff;
+    --bg2: #e8eeff;
+    --bg3: #dde5ff;
+    --card: rgba(255,255,255,0.7);
+    --border: rgba(0,0,0,0.08);
+    --border2: rgba(56,189,248,0.4);
+    --text: #0f172a;
+    --muted: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; font-family: var(--font-body); }
+  input, textarea, select { font-family: var(--font-body); }
+
+  /* Animations */
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  @keyframes glow { 0%,100%{box-shadow:0 0 20px rgba(56,189,248,0.3)} 50%{box-shadow:0 0 40px rgba(56,189,248,0.7),0 0 80px rgba(56,189,248,0.3)} }
+  @keyframes slideIn { from{transform:translateX(-100%);opacity:0} to{transform:translateX(0);opacity:1} }
+  @keyframes fadeUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+  @keyframes matrix { 0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)} }
+  @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes typewriter { from{width:0} to{width:100%} }
+  @keyframes blink { 50%{opacity:0} }
+  @keyframes xpFill { from{width:0} }
+  @keyframes orbit { 0%{transform:rotate(0deg) translateX(80px) rotate(0deg)} 100%{transform:rotate(360deg) translateX(80px) rotate(-360deg)} }
+  @keyframes neonPulse { 0%,100%{text-shadow:0 0 10px var(--neon),0 0 20px var(--neon)} 50%{text-shadow:0 0 20px var(--neon),0 0 40px var(--neon),0 0 80px var(--neon)} }
+  @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  @keyframes particleFly { 0%{transform:translate(0,0) scale(1);opacity:1} 100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0} }
+  @keyframes levelUp { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+  @keyframes victory { 0%{transform:scale(0) rotate(-180deg);opacity:0} 60%{transform:scale(1.2) rotate(10deg)} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+
+  .animate-float { animation: float 3s ease-in-out infinite; }
+  .animate-pulse { animation: pulse 2s ease-in-out infinite; }
+  .animate-glow { animation: glow 2s ease-in-out infinite; }
+  .animate-fadeUp { animation: fadeUp 0.6s ease forwards; }
+  .animate-neon { animation: neonPulse 2s ease-in-out infinite; }
+  .animate-gradient { background-size: 400% 400%; animation: gradient 8s ease infinite; }
+  .animate-bounce-slow { animation: bounce 2s ease-in-out infinite; }
+  .animate-levelUp { animation: levelUp 0.5s ease; }
+  .animate-victory { animation: victory 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+  /* Glassmorphism */
+  .glass { background: var(--card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); }
+  .glass-strong { background: rgba(255,255,255,0.06); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.12); }
+
+  /* Gradients */
+  .grad-text { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .grad-text-gold { background: linear-gradient(135deg, #fbbf24, #f59e0b, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .grad-bg { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  .grad-bg-2 { background: linear-gradient(135deg, var(--accent2), var(--accent3)); }
+  .grad-bg-3 { background: linear-gradient(135deg, var(--accent4), var(--danger)); }
+
+  /* Neon borders */
+  .neon-border { border: 1px solid transparent; background-clip: padding-box; position: relative; }
+  .neon-border::before { content:''; position:absolute; inset:-1px; border-radius:inherit; background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3)); z-index:-1; }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; transition: all 0.3s; }
+  .card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 50px; font-weight: 600; font-size: 14px; transition: all 0.3s; border: none; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 0 20px rgba(56,189,248,0.3); }
+  .btn-primary:hover { box-shadow: 0 0 40px rgba(56,189,248,0.6); transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 30px; }
+  .btn-danger { background: linear-gradient(135deg, #f87171, #ef4444); color: #fff; }
+  .btn-success { background: linear-gradient(135deg, #34d399, #10b981); color: #fff; }
+  .btn-gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; }
+
+  /* Progress bar */
+  .progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s ease; }
+  .progress-fill-gold { background: linear-gradient(90deg, #fbbf24, #fb923c); }
+  .progress-fill-green { background: linear-gradient(90deg, #34d399, #10b981); }
+
+  /* Sidebar */
+  .sidebar { width: 260px; min-height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); padding: 24px 0; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; z-index: 100; transition: transform 0.3s; }
+  .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: var(--muted); transition: all 0.2s; cursor: pointer; border-radius: 0 30px 30px 0; margin-right: 16px; font-size: 14px; font-weight: 500; }
+  .sidebar-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+  .sidebar-item.active { color: var(--accent); background: rgba(56,189,248,0.1); border-right: 3px solid var(--accent); }
+  .sidebar-item.active i { color: var(--accent); }
+  .sidebar-item i { width: 20px; text-align: center; }
+
+  /* Main content */
+  .main-content { margin-left: 260px; min-height: 100vh; padding: 24px; }
+
+  /* Tags/badges */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .badge-blue { background: rgba(56,189,248,0.15); color: var(--accent); border: 1px solid rgba(56,189,248,0.3); }
+  .badge-purple { background: rgba(167,139,250,0.15); color: var(--accent2); border: 1px solid rgba(167,139,250,0.3); }
+  .badge-green { background: rgba(52,211,153,0.15); color: var(--accent3); border: 1px solid rgba(52,211,153,0.3); }
+  .badge-gold { background: rgba(251,191,36,0.15); color: var(--gold); border: 1px solid rgba(251,191,36,0.3); }
+  .badge-red { background: rgba(248,113,113,0.15); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+
+  /* Stats */
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; transition: all 0.3s; }
+  .stat-card:hover { border-color: var(--border2); }
+
+  /* Code editor */
+  .code-area { font-family: var(--font-code); font-size: 13px; line-height: 1.6; background: #0d1117; color: #e6edf3; border: 1px solid var(--border); border-radius: 8px; padding: 16px; resize: none; width: 100%; }
+
+  /* Chat */
+  .chat-bubble { max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; }
+  .chat-bubble.user { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-radius: 16px 16px 4px 16px; margin-left: auto; }
+  .chat-bubble.ai { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px 16px 16px 4px; }
+
+  /* Quiz */
+  .quiz-option { padding: 14px 18px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 14px; }
+  .quiz-option:hover { border-color: var(--accent); background: rgba(56,189,248,0.05); }
+  .quiz-option.correct { border-color: var(--accent3); background: rgba(52,211,153,0.1); color: var(--accent3); }
+  .quiz-option.wrong { border-color: var(--danger); background: rgba(248,113,113,0.1); color: var(--danger); animation: shake 0.3s; }
+  .quiz-option.selected { border-color: var(--accent2); background: rgba(167,139,250,0.1); }
+
+  /* Leaderboard */
+  .rank-1 { background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.05)); border-color: rgba(251,191,36,0.4) !important; }
+  .rank-2 { background: linear-gradient(135deg, rgba(226,232,240,0.1), rgba(148,163,184,0.05)); border-color: rgba(148,163,184,0.4) !important; }
+  .rank-3 { background: linear-gradient(135deg, rgba(251,146,60,0.15), rgba(249,115,22,0.05)); border-color: rgba(251,146,60,0.4) !important; }
+
+  /* Roadmap */
+  .roadmap-node { position: relative; }
+  .roadmap-node::before { content:''; position:absolute; left:24px; top:48px; width:2px; height:calc(100% - 48px); background:linear-gradient(to bottom, var(--accent), transparent); }
+  .roadmap-node:last-child::before { display:none; }
+
+  /* Mission card */
+  .mission-card { background: linear-gradient(135deg, rgba(56,189,248,0.05), rgba(167,139,250,0.05)); border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: all 0.3s; }
+  .mission-card:hover { border-color: var(--border2); transform: translateX(4px); }
+  .mission-card.completed { border-color: rgba(52,211,153,0.4); background: rgba(52,211,153,0.05); }
+
+  /* Typing cursor */
+  .typing-cursor::after { content: '|'; animation: blink 1s infinite; color: var(--accent); }
+
+  /* Particle */
+  .particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); animation: particleFly 1s forwards; }
+
+  /* Scrollable */
+  .scrollable { overflow-y: auto; }
+  .scrollable::-webkit-scrollbar { width: 4px; }
+  .scrollable::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* Hero particles canvas area */
+  .particles-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .particle-dot { position: absolute; width: 2px; height: 2px; background: var(--accent); border-radius: 50%; animation: float var(--dur, 4s) ease-in-out infinite; animation-delay: var(--delay, 0s); opacity: var(--op, 0.6); }
+
+  /* Grid pattern */
+  .grid-bg { background-image: linear-gradient(rgba(56,189,248,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.05) 1px, transparent 1px); background-size: 50px 50px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; }
+  }
+
+  /* Tooltip */
+  .tooltip { position: relative; }
+  .tooltip:hover .tooltip-content { opacity: 1; visibility: visible; transform: translateY(-4px); }
+  .tooltip-content { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(0); background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 12px; white-space: nowrap; opacity: 0; visibility: hidden; transition: all 0.2s; pointer-events: none; z-index: 1000; margin-bottom: 8px; }
+
+  /* XP bar at top */
+  .xp-bar { height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3)); animation: xpFill 1.5s ease; }
+
+  /* Star rating */
+  .star { color: var(--muted); transition: color 0.2s; }
+  .star.lit { color: var(--gold); }
+
+  /* Achievement unlock */
+  .achievement-popup { position: fixed; top: 80px; right: 20px; z-index: 9999; animation: slideIn 0.5s ease, fadeOut 0.5s ease 3s forwards; }
+  @keyframes fadeOut { to{opacity:0;transform:translateX(100%)} }
+
+  /* Loading */
+  .loading-dots span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.4s ease-in-out infinite; }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  /* Switch */
+  .switch { width: 44px; height: 24px; background: var(--muted); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.3s; }
+  .switch.on { background: var(--accent); }
+  .switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: transform 0.3s; }
+  .switch.on::after { transform: translateX(20px); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ═══════════════════════════════════════
+// DATA & CONSTANTS
+// ═══════════════════════════════════════
+const SUBJECTS = [
+  { id: 'c', name: 'C Programming', icon: '⚙️', color: '#38bdf8', progress: 72, difficulty: 'Intermediate', xp: 840, lessons: 24, completed: 18 },
+  { id: 'cpp', name: 'C++', icon: '⚡', color: '#a78bfa', progress: 45, difficulty: 'Advanced', xp: 620, lessons: 32, completed: 14 },
+  { id: 'python', name: 'Python', icon: '🐍', color: '#34d399', progress: 88, difficulty: 'Beginner', xp: 1240, lessons: 40, completed: 35 },
+  { id: 'java', name: 'Java', icon: '☕', color: '#fb923c', progress: 33, difficulty: 'Intermediate', xp: 380, lessons: 36, completed: 12 },
+  { id: 'web', name: 'Web Dev', icon: '🌐', color: '#f472b6', progress: 60, difficulty: 'Beginner', xp: 720, lessons: 28, completed: 17 },
+  { id: 'dsa', name: 'DSA', icon: '🔗', color: '#fbbf24', progress: 25, difficulty: 'Expert', xp: 290, lessons: 50, completed: 12 },
+  { id: 'math', name: 'Mathematics', icon: '📐', color: '#60a5fa', progress: 55, difficulty: 'Intermediate', xp: 510, lessons: 22, completed: 12 },
+  { id: 'physics', name: 'Physics', icon: '⚛️', color: '#e879f9', progress: 40, difficulty: 'Intermediate', xp: 430, lessons: 20, completed: 8 },
+];
+
+const ACHIEVEMENTS = [
+  { id: 1, name: 'First Blood', desc: 'Complete your first lesson', icon: '🩸', unlocked: true },
+  { id: 2, name: 'Code Warrior', desc: 'Solve 10 coding challenges', icon: '⚔️', unlocked: true },
+  { id: 3, name: 'Speed Runner', desc: 'Complete a quiz in under 2 minutes', icon: '⚡', unlocked: true },
+  { id: 4, name: 'AI Whisperer', desc: 'Ask AI 50 questions', icon: '🤖', unlocked: false },
+  { id: 5, name: 'Streak Master', desc: 'Maintain 30 day streak', icon: '🔥', unlocked: false },
+  { id: 6, name: 'Leaderboard Legend', desc: 'Reach top 10', icon: '👑', unlocked: false },
+];
+
+const LEADERBOARD = [
+  { rank: 1, name: 'Arjun Kumar', xp: 12450, level: 28, avatar: '🦅', streak: 45 },
+  { rank: 2, name: 'Priya Sharma', xp: 11200, level: 26, avatar: '🌟', streak: 38 },
+  { rank: 3, name: 'Rahul Verma', xp: 10800, level: 25, avatar: '🔥', streak: 31 },
+  { rank: 4, name: 'You', xp: 9640, level: 22, avatar: '⚡', streak: 21, isUser: true },
+  { rank: 5, name: 'Sneha Patel', xp: 8900, level: 21, avatar: '💫', streak: 17 },
+  { rank: 6, name: 'Dev Nair', xp: 7650, level: 19, avatar: '🌊', streak: 12 },
+  { rank: 7, name: 'Aisha Khan', xp: 6400, level: 17, avatar: '🌺', streak: 9 },
+];
+
+const MISSIONS = [
+  { id: 1, title: 'Daily Warmup', desc: 'Complete 3 lessons today', xp: 100, coins: 20, progress: 2, total: 3, icon: '🌅' },
+  { id: 2, title: 'Quiz Champion', desc: 'Score 90%+ on any quiz', xp: 250, coins: 50, progress: 0, total: 1, icon: '🎯' },
+  { id: 3, title: 'Code Master', desc: 'Solve 5 coding problems', xp: 500, coins: 100, progress: 3, total: 5, icon: '💻' },
+  { id: 4, title: 'Knowledge Seeker', desc: 'Ask AI 10 questions', xp: 150, coins: 30, progress: 7, total: 10, icon: '🧠' },
+  { id: 5, title: 'Social Butterfly', desc: 'Post in community', xp: 50, coins: 10, progress: 0, total: 1, icon: '👥' },
+];
+
+const QUIZ_QUESTIONS = [
+  { q: 'What is the time complexity of binary search?', opts: ['O(n)', 'O(log n)', 'O(n²)', 'O(1)'], ans: 1, exp: 'Binary search divides the search space in half each time, giving O(log n) complexity.' },
+  { q: 'Which data structure uses LIFO principle?', opts: ['Queue', 'Stack', 'Array', 'Linked List'], ans: 1, exp: 'Stack uses Last In First Out (LIFO) principle.' },
+  { q: 'What does HTML stand for?', opts: ['Hyper Text Markup Language', 'High Tech Markup Language', 'Hyper Transfer Markup Language', 'Home Tool Markup Language'], ans: 0, exp: 'HTML = HyperText Markup Language, the standard for web pages.' },
+  { q: 'In Python, what is the output of type([])?', opts: ['<class "array">', '<class "list">', '<class "tuple">', '<class "dict">'], ans: 1, exp: '[] creates a list in Python, so type([]) returns <class "list">.' },
+];
+
+const ROADMAPS = {
+  'Web Developer': ['HTML & CSS Basics','JavaScript Fundamentals','React / Vue / Angular','Node.js & Express','Databases (SQL & NoSQL)','REST APIs','Git & Version Control','Deployment & DevOps'],
+  'AI Engineer': ['Python Mastery','Linear Algebra & Statistics','Machine Learning Basics','Deep Learning & Neural Nets','TensorFlow / PyTorch','NLP & Computer Vision','MLOps & Deployment','Research & Papers'],
+  'Data Scientist': ['Python & R Basics','Statistics & Probability','Data Wrangling (Pandas)','Data Visualization','ML Algorithms','Feature Engineering','Big Data Tools','Business Intelligence'],
+  'App Developer': ['Programming Fundamentals','React Native / Flutter','UI/UX Principles','State Management','APIs & Backend','Database Design','App Store Publishing','Performance Optimization'],
+  'Cybersecurity': ['Networking Fundamentals','Linux & Command Line','Web Security Basics','Cryptography','Ethical Hacking','Penetration Testing','Incident Response','Security Certifications'],
+};
+
+const COMMUNITY_POSTS = [
+  { id: 1, author: 'Arjun Kumar', avatar: '🦅', time: '2h ago', content: 'Just cracked the Fibonacci sequence using dynamic programming! 🔥 The trick is to use memoization to avoid recalculating subproblems.', likes: 47, comments: 12, tags: ['DSA', 'Python'] },
+  { id: 2, author: 'Priya Sharma', avatar: '🌟', time: '5h ago', content: 'Day 45 of my coding streak! Started learning C++ templates today and my brain is melting 😅 Anyone else find them confusing at first?', likes: 89, comments: 23, tags: ['C++', 'Streak'] },
+  { id: 3, author: 'Rahul Verma', avatar: '🔥', time: '1d ago', content: 'Built my first full-stack app using React + Node.js + MongoDB. LearnQuest AI roadmap made it so structured! Check out my GitHub 🚀', likes: 134, comments: 41, tags: ['Web Dev', 'React'] },
+];
+
+const CODE_TEMPLATES = {
+  python: `# Python - Hello World
+def greet(name):
+    """A simple greeting function"""
+    return f"Hello, {name}! Welcome to LearnQuest AI 🚀"
+
+# Main execution
+if __name__ == "__main__":
+    message = greet("Learner")
+    print(message)
+    
+    # Let's do some math
+    numbers = [1, 2, 3, 4, 5]
+    total = sum(numbers)
+    print(f"Sum of {numbers} = {total}")`,
+  javascript: `// JavaScript - Async/Await Example
+async function fetchUserData(userId) {
+  try {
+    // Simulating API call
+    const response = await fetch(\`/api/users/\${userId}\`);
+    const data = await response.json();
+    
+    return {
+      name: data.name,
+      level: data.level,
+      xp: data.xp
+    };
+  } catch (error) {
+    console.error('Failed to fetch:', error);
+    return null;
+  }
+}
+
+// Arrow function with destructuring
+const formatUser = ({ name, level, xp }) => 
+  \`\${name} | Level \${level} | \${xp} XP\`;
+
+fetchUserData(1).then(user => console.log(formatUser(user)));`,
+  c: `// C - Fibonacci with Memoization
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+long long memo[MAX];
+
+long long fibonacci(int n) {
+    if (n <= 1) return n;
+    if (memo[n] != -1) return memo[n];
+    
+    memo[n] = fibonacci(n-1) + fibonacci(n-2);
+    return memo[n];
+}
+
+int main() {
+    memset(memo, -1, sizeof(memo));
+    
+    printf("Fibonacci Series:\\n");
+    for (int i = 0; i < 15; i++) {
+        printf("F(%d) = %lld\\n", i, fibonacci(i));
+    }
+    
+    return 0;
+}`,
+};
+
+const AI_RESPONSES = [
+  "Great question! Let me explain that step by step. 🎯",
+  "I can see you're working on understanding this concept. Here's a clear breakdown...",
+  "Excellent! This is one of the most important topics in computer science.",
+  "Think of it this way — it's like organizing books on a shelf where each book points to the next one.",
+  "Here's a practical example you can try in the code editor right now:",
+];
+
+// ═══════════════════════════════════════
+// PARTICLE BACKGROUND
+// ═══════════════════════════════════════
+const ParticleBg = () => {
+  const particles = Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    dur: `${3 + Math.random() * 4}s`,
+    delay: `${Math.random() * 4}s`,
+    op: 0.2 + Math.random() * 0.4,
+    size: Math.random() > 0.7 ? 4 : 2,
+    color: ['#38bdf8','#a78bfa','#34d399','#fbbf24'][Math.floor(Math.random()*4)],
+  }));
+  return (
+    <div className="particles-bg">
+      {particles.map(p => (
+        <div key={p.id} className="particle-dot" style={{ left: p.left, top: p.top, '--dur': p.dur, '--delay': p.delay, '--op': p.op, width: p.size, height: p.size, background: p.color }} />
+      ))}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// XP NOTIFICATION
+// ═══════════════════════════════════════
+const XPNotification = ({ xp, message, onDone }) => {
+  useEffect(() => { setTimeout(onDone, 3500); }, []);
+  return (
+    <div className="achievement-popup glass-strong" style={{ borderRadius: 16, padding: '16px 20px', minWidth: 260, border: '1px solid rgba(52,211,153,0.4)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ fontSize: 32 }}>🎉</div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--accent3)' }}>+{xp} XP Earned!</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{message}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// HERO SECTION (Landing)
+// ═══════════════════════════════════════
+const HeroSection = ({ onNavigate }) => {
+  const [typed, setTyped] = useState('');
+  const words = ['Coding', 'Python', 'DSA', 'Web Dev', 'AI/ML', 'Math'];
+  const [wordIdx, setWordIdx] = useState(0);
+  useEffect(() => {
+    let i = 0;
+    const current = words[wordIdx];
+    const type = setInterval(() => {
+      setTyped(current.slice(0, i + 1));
+      i++;
+      if (i === current.length) {
+        clearInterval(type);
+        setTimeout(() => {
+          setWordIdx(p => (p + 1) % words.length);
+          setTyped('');
+        }, 1500);
+      }
+    }, 80);
+    return () => clearInterval(type);
+  }, [wordIdx]);
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', position: 'relative', overflow: 'hidden' }}>
+      <ParticleBg />
+      {/* Grid bg */}
+      <div className="grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.4 }} />
+      {/* Glows */}
+      <div style={{ position: 'absolute', top: '20%', left: '10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(56,189,248,0.12) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(40px)' }} />
+      <div style={{ position: 'absolute', top: '30%', right: '10%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(40px)' }} />
+      
+      {/* Nav */}
+      <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 60px', position: 'relative', zIndex: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>⚡</div>
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700, letterSpacing: 1 }} className="grad-text">LearnQuest AI</span>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn btn-ghost btn-sm" onClick={() => onNavigate('login')}>Login</button>
+          <button className="btn btn-primary btn-sm" onClick={() => onNavigate('dashboard')}>Get Started</button>
+        </div>
+      </nav>
+
+      {/* Hero Content */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 80px)', textAlign: 'center', padding: '0 20px', position: 'relative', zIndex: 10 }}>
+        <div className="badge badge-blue animate-fadeUp" style={{ marginBottom: 24, fontSize: 12 }}>
+          <span style={{ animation: 'pulse 1s infinite', width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
+          AI-Powered Learning Platform
+        </div>
+        
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 900, lineHeight: 1.1, marginBottom: 20, animation: 'fadeUp 0.6s ease 0.2s both' }}>
+          <span className="grad-text">Level Up Your</span>
+          <br />
+          <span style={{ color: 'var(--text)' }}>Learning with</span>
+          <br />
+          <span style={{ color: 'var(--neon)', textShadow: '0 0 30px rgba(0,255,136,0.5)' }}>AI</span>
+        </h1>
+
+        <div style={{ fontSize: 24, fontWeight: 600, marginBottom: 16, color: 'var(--muted)', animation: 'fadeUp 0.6s ease 0.3s both' }}>
+          Master <span style={{ color: 'var(--accent)', borderBottom: '2px solid var(--accent)' }} className="typing-cursor">{typed}</span> with your AI tutor
+        </div>
+
+        <p style={{ maxWidth: 540, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 40, fontSize: 16, animation: 'fadeUp 0.6s ease 0.4s both' }}>
+          The most advanced AI learning platform. Gamified lessons, real-time coding, adaptive AI tutoring, and battle modes that make learning addictive.
+        </p>
+
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', animation: 'fadeUp 0.6s ease 0.5s both' }}>
+          <button className="btn btn-primary" style={{ fontSize: 16, padding: '16px 36px' }} onClick={() => onNavigate('dashboard')}>
+            <i className="fa fa-rocket" /> Start Learning Free
+          </button>
+          <button className="btn btn-ghost" style={{ fontSize: 16, padding: '16px 36px' }} onClick={() => onNavigate('dashboard')}>
+            <i className="fa fa-play-circle" /> Watch Demo
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div style={{ display: 'flex', gap: 48, marginTop: 64, animation: 'fadeUp 0.6s ease 0.6s both' }}>
+          {[['50K+','Active Learners'],['200+','AI Lessons'],['98%','Success Rate'],['24/7','AI Support']].map(([n,l]) => (
+            <div key={l} style={{ textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 900, color: 'var(--accent)' }}>{n}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{l}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Floating UI elements */}
+        <div className="animate-float glass" style={{ position: 'absolute', right: '8%', top: '25%', padding: '12px 16px', borderRadius: 12, fontSize: 13, zIndex: 5, minWidth: 180 }}>
+          <div style={{ color: 'var(--accent3)', fontWeight: 600, marginBottom: 4 }}>🏆 Achievement Unlocked!</div>
+          <div style={{ color: 'var(--muted)', fontSize: 12 }}>Python Beginner — Level 5</div>
+          <div className="progress-bar" style={{ marginTop: 8 }}><div className="progress-fill" style={{ width: '70%' }} /></div>
+        </div>
+        <div className="animate-float glass" style={{ position: 'absolute', left: '8%', top: '35%', padding: '12px 16px', borderRadius: 12, fontSize: 13, zIndex: 5, animationDelay: '1s', minWidth: 160 }}>
+          <div style={{ fontWeight: 600, marginBottom: 4 }}>🔥 21 Day Streak!</div>
+          <div style={{ color: 'var(--muted)', fontSize: 12 }}>+50 bonus XP today</div>
+        </div>
+        <div className="animate-float glass" style={{ position: 'absolute', right: '12%', bottom: '25%', padding: '12px 16px', borderRadius: 12, fontSize: 13, zIndex: 5, animationDelay: '2s' }}>
+          <div style={{ color: 'var(--gold)', fontWeight: 600 }}>⚡ +240 XP Earned</div>
+          <div style={{ color: 'var(--muted)', fontSize: 12 }}>Quiz completed!</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// LOGIN PAGE
+// ═══════════════════════════════════════
+const LoginPage = ({ onNavigate }) => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [form, setForm] = useState({ email: '', password: '', name: '' });
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, position: 'relative' }}>
+      <ParticleBg />
+      <div className="grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.3 }} />
+      <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, background: 'radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(40px)' }} />
+      
+      <div className="glass-strong animate-fadeUp" style={{ borderRadius: 24, padding: 48, width: '100%', maxWidth: 440, position: 'relative', zIndex: 10 }}>
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>⚡</div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 24, fontWeight: 700 }} className="grad-text">
+            {isLogin ? 'Welcome Back' : 'Join LearnQuest'}
+          </h2>
+          <p style={{ color: 'var(--muted)', fontSize: 14, marginTop: 8 }}>
+            {isLogin ? 'Continue your learning journey' : 'Start your AI learning adventure'}
+          </p>
+        </div>
+
+        {/* Social logins */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
+          {[['🔷','Google'],['⬛','GitHub'],['📘','LinkedIn']].map(([icon,name]) => (
+            <button key={name} className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center', fontSize: 13, padding: '10px 8px' }} onClick={() => onNavigate('dashboard')}>
+              {icon} {name}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+          <span style={{ color: 'var(--muted)', fontSize: 12 }}>or continue with email</span>
+          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {!isLogin && (
+            <input placeholder="Full Name" value={form.name} onChange={e => setForm(p=>({...p,name:e.target.value}))}
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 16px', color: 'var(--text)', fontSize: 14 }} />
+          )}
+          <input placeholder="Email address" type="email" value={form.email} onChange={e => setForm(p=>({...p,email:e.target.value}))}
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 16px', color: 'var(--text)', fontSize: 14 }} />
+          <input placeholder="Password" type="password" value={form.password} onChange={e => setForm(p=>({...p,password:e.target.value}))}
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 16px', color: 'var(--text)', fontSize: 14 }} />
+          {isLogin && <div style={{ textAlign: 'right', fontSize: 13 }}><span style={{ color: 'var(--accent)', cursor: 'pointer' }}>Forgot password?</span></div>}
+          <button className="btn btn-primary" style={{ justifyContent: 'center', padding: 14, fontSize: 15 }} onClick={() => onNavigate('dashboard')}>
+            {isLogin ? '🚀 Login & Learn' : '⚡ Create Account'}
+          </button>
+        </div>
+
+        <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--muted)', marginTop: 20 }}>
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
+          <span style={{ color: 'var(--accent)', cursor: 'pointer' }} onClick={() => setIsLogin(!isLogin)}>
+            {isLogin ? 'Sign up free' : 'Login'}
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════
+const Dashboard = ({ userXP, setUserXP, showXP }) => {
+  const weekData = [40, 65, 30, 80, 55, 90, 70];
+  const days = ['M','T','W','T','F','S','S'];
+  const maxVal = Math.max(...weekData);
+
+  return (
+    <div>
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+          <div>
+            <h1 style={{ fontSize: 28, fontWeight: 700 }}>Good Morning, Shiva! 👋</h1>
+            <p style={{ color: 'var(--muted)', marginTop: 4 }}>Ready to level up today? Your AI tutor is waiting.</p>
+          </div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <div className="glass" style={{ padding: '10px 16px', borderRadius: 12, textAlign: 'center' }}>
+              <div style={{ fontSize: 20 }}>🔥</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>21 day streak</div>
+            </div>
+            <div className="glass" style={{ padding: '10px 16px', borderRadius: 12, textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 16, color: 'var(--gold)', fontWeight: 700 }}>{userXP.toLocaleString()}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Total XP</div>
+            </div>
+          </div>
+        </div>
+        {/* XP Progress */}
+        <div className="glass" style={{ borderRadius: 12, padding: '12px 16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>
+            <span>Level 22 → Level 23</span>
+            <span style={{ color: 'var(--accent)' }}>{userXP} / 10000 XP</span>
+          </div>
+          <div className="progress-bar" style={{ height: 8 }}>
+            <div className="progress-fill animate-gradient" style={{ width: `${(userXP % 10000) / 100}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3))' }} />
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
+        {[
+          { label: 'Lessons Done', val: 127, icon: '📚', color: 'var(--accent)', delta: '+8 this week' },
+          { label: 'Quiz Score', val: '87%', icon: '🎯', color: 'var(--accent2)', delta: '+5% from last week' },
+          { label: 'Coins Earned', val: '2,840', icon: '🪙', color: 'var(--gold)', delta: '+230 today' },
+          { label: 'Rank', val: '#4', icon: '🏆', color: 'var(--accent3)', delta: '↑2 positions' },
+        ].map(s => (
+          <div key={s.label} className="stat-card" style={{ borderLeft: `3px solid ${s.color}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>{s.label}</div>
+                <div style={{ fontSize: 28, fontWeight: 700, fontFamily: 'var(--font-display)', color: s.color }}>{s.val}</div>
+                <div style={{ fontSize: 11, color: 'var(--accent3)', marginTop: 4 }}>{s.delta}</div>
+              </div>
+              <div style={{ fontSize: 28 }}>{s.icon}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 20, marginBottom: 24 }}>
+        {/* Weekly Activity */}
+        <div className="card" style={{ padding: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 20 }}>📊 Weekly Activity</h3>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', height: 120 }}>
+            {weekData.map((v, i) => (
+              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <div style={{ height: `${(v / maxVal) * 100}px`, width: '100%', background: i === 6 ? 'linear-gradient(180deg, var(--accent), var(--accent2))' : 'rgba(56,189,248,0.2)', borderRadius: '4px 4px 0 0', transition: 'all 0.5s', cursor: 'pointer', position: 'relative' }} className="tooltip">
+                  <div className="tooltip-content">{v} min</div>
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{days[i]}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 16, display: 'flex', gap: 16, fontSize: 12, color: 'var(--muted)' }}>
+            <span>Total: <strong style={{ color: 'var(--text)' }}>430 min</strong></span>
+            <span>Best: <strong style={{ color: 'var(--accent)' }}>90 min (Sat)</strong></span>
+          </div>
+        </div>
+
+        {/* AI Recommendations */}
+        <div className="card" style={{ padding: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>🤖 AI Recommendations</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              { icon: '🎯', text: 'Review Pointers in C — you struggled last session', tag: 'C Prog', color: 'var(--accent)' },
+              { icon: '⚡', text: 'You\'re ready for Binary Trees!', tag: 'DSA', color: 'var(--gold)' },
+              { icon: '🔥', text: 'Take the Python OOP quiz to earn 500 XP', tag: 'Python', color: 'var(--accent3)' },
+            ].map((r, i) => (
+              <div key={i} className="mission-card" style={{ cursor: 'pointer' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <span style={{ fontSize: 18 }}>{r.icon}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, lineHeight: 1.5, marginBottom: 4 }}>{r.text}</div>
+                    <span className="badge" style={{ background: `${r.color}20`, color: r.color, border: `1px solid ${r.color}40`, fontSize: 10 }}>{r.tag}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Continue Learning */}
+      <div className="card" style={{ padding: 24, marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>▶️ Continue Learning</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+          {SUBJECTS.slice(0, 4).map(s => (
+            <div key={s.id} className="glass" style={{ padding: 16, borderRadius: 12, cursor: 'pointer', transition: 'all 0.3s' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = s.color}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+              <div style={{ fontSize: 28, marginBottom: 8 }}>{s.icon}</div>
+              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>{s.name}</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>Lesson {s.completed + 1} of {s.lessons}</div>
+              <div className="progress-bar"><div className="progress-fill" style={{ width: `${s.progress}%`, background: `linear-gradient(90deg, ${s.color}, ${s.color}88)` }} /></div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{s.progress}% complete</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Daily Missions */}
+      <div className="card" style={{ padding: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 600 }}>⚔️ Daily Missions</h3>
+          <span style={{ fontSize: 12, color: 'var(--muted)' }}>Resets in 6h 42m</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          {MISSIONS.slice(0, 3).map(m => (
+            <div key={m.id} className={`mission-card ${m.progress >= m.total ? 'completed' : ''}`}>
+              <div style={{ fontSize: 24, marginBottom: 8 }}>{m.icon}</div>
+              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>{m.title}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>{m.desc}</div>
+              <div className="progress-bar" style={{ marginBottom: 8 }}>
+                <div className="progress-fill-green progress-fill" style={{ width: `${(m.progress/m.total)*100}%` }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11 }}>
+                <span style={{ color: 'var(--muted)' }}>{m.progress}/{m.total}</span>
+                <span style={{ color: 'var(--gold)' }}>+{m.xp} XP +{m.coins}🪙</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// SUBJECTS PAGE
+// ═══════════════════════════════════════
+const SubjectsPage = ({ showXP }) => {
+  const [filter, setFilter] = useState('all');
+  const filtered = filter === 'all' ? SUBJECTS : SUBJECTS.filter(s => s.difficulty.toLowerCase() === filter);
+  return (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>📚 Subject Modules</h1>
+        <p style={{ color: 'var(--muted)' }}>Choose your learning path and master any subject with AI</p>
+      </div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+        {['all','beginner','intermediate','advanced','expert'].map(f => (
+          <button key={f} className={`btn btn-sm ${filter === f ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setFilter(f)} style={{ textTransform: 'capitalize' }}>{f}</button>
+        ))}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+        {filtered.map(s => (
+          <div key={s.id} className="card" style={{ padding: 24, cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
+            onClick={() => showXP(50, `Started ${s.name} lesson!`)}>
+            <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: `${s.color}15`, filter: 'blur(10px)' }} />
+            <div style={{ fontSize: 40, marginBottom: 12 }}>{s.icon}</div>
+            <h3 style={{ fontWeight: 700, marginBottom: 4 }}>{s.name}</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <span className={`badge ${s.difficulty === 'Beginner' ? 'badge-green' : s.difficulty === 'Intermediate' ? 'badge-blue' : s.difficulty === 'Advanced' ? 'badge-purple' : 'badge-red'}`}>{s.difficulty}</span>
+              <span style={{ fontSize: 12, color: s.color, fontWeight: 600 }}>{s.xp} XP</span>
+            </div>
+            <div className="progress-bar" style={{ marginBottom: 8 }}>
+              <div className="progress-fill" style={{ width: `${s.progress}%`, background: `linear-gradient(90deg, ${s.color}, ${s.color}88)` }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
+              <span>{s.progress}% complete</span>
+              <span>{s.completed}/{s.lessons} lessons</span>
+            </div>
+            <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', background: `linear-gradient(135deg, ${s.color}, ${s.color}88)` }}>
+              {s.progress > 0 ? '▶ Continue' : '🚀 Start'} Learning
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// AI CHAT
+// ═══════════════════════════════════════
+const AIChatPage = ({ showXP }) => {
+  const [messages, setMessages] = useState([
+    { role: 'ai', text: "Hey! I'm your AI tutor 🤖 I can help you with coding, math, physics, and more. What would you like to learn today?" }
+  ]);
+  const [input, setInput] = useState('');
+  const [typing, setTyping] = useState(false);
+  const [selectedChat, setSelectedChat] = useState(0);
+  const messagesEndRef = useRef(null);
+
+  const chatHistory = [
+    { id: 0, title: 'Current Session', time: 'Now', preview: 'AI tutor ready...' },
+    { id: 1, title: 'C Pointers Help', time: '2h ago', preview: 'Explained pointer arithmetic...' },
+    { id: 2, title: 'Python Lists vs Arrays', time: 'Yesterday', preview: 'Comparison of data structures...' },
+    { id: 3, title: 'DSA - Binary Trees', time: '2d ago', preview: 'Tree traversal algorithms...' },
+  ];
+
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+    const userMsg = input;
+    setInput('');
+    setMessages(p => [...p, { role: 'user', text: userMsg }]);
+    setTyping(true);
+    showXP(10, 'AI Question answered!');
+    setTimeout(() => {
+      const resp = AI_RESPONSES[Math.floor(Math.random() * AI_RESPONSES.length)];
+      const full = `${resp}\n\n**${userMsg.includes('?') ? 'Answer' : 'Explanation'}:** This is a fundamental concept in computer science. Let me break it down step by step:\n\n1. **First**, understand the basic principle\n2. **Then**, look at how it's implemented\n3. **Finally**, practice with examples\n\nWould you like me to show you a code example? 💻`;
+      setMessages(p => [...p, { role: 'ai', text: full }]);
+      setTyping(false);
+    }, 1500);
+  };
+
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, typing]);
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 0, height: 'calc(100vh - 100px)', borderRadius: 16, overflow: 'hidden', border: '1px solid var(--border)' }}>
+      {/* Sidebar */}
+      <div style={{ background: 'var(--bg2)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: 16, borderBottom: '1px solid var(--border)' }}>
+          <button className="btn btn-primary btn-sm" style={{ width: '100%', justifyContent: 'center' }}>
+            <i className="fa fa-plus" /> New Chat
+          </button>
+        </div>
+        <div className="scrollable" style={{ flex: 1, padding: 8 }}>
+          {chatHistory.map(c => (
+            <div key={c.id} onClick={() => setSelectedChat(c.id)}
+              style={{ padding: '10px 12px', borderRadius: 8, cursor: 'pointer', marginBottom: 4, background: selectedChat === c.id ? 'rgba(56,189,248,0.1)' : 'transparent', border: selectedChat === c.id ? '1px solid rgba(56,189,248,0.3)' : '1px solid transparent', transition: 'all 0.2s' }}>
+              <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.title}</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.preview}</div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>{c.time}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ padding: 12, borderTop: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {['C','Python','DSA','Math','Web'].map(t => (
+              <span key={t} className="badge badge-blue" style={{ cursor: 'pointer', fontSize: 10 }} onClick={() => setInput(`Explain ${t} concepts to me`)}>{t}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Chat Area */}
+      <div style={{ display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
+        <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }} className="animate-glow">🤖</div>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 14 }}>LearnQuest AI Tutor</div>
+            <div style={{ fontSize: 11, color: 'var(--accent3)' }}>● Online — Specialized in CS & Academics</div>
+          </div>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+            {['📋','⚙️','🔍'].map(i => <button key={i} style={{ background: 'none', border: 'none', fontSize: 16, cursor: 'pointer', color: 'var(--muted)' }}>{i}</button>)}
+          </div>
+        </div>
+
+        <div className="scrollable" style={{ flex: 1, padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {messages.map((m, i) => (
+            <div key={i} style={{ display: 'flex', gap: 12, flexDirection: m.role === 'user' ? 'row-reverse' : 'row', alignItems: 'flex-start' }}>
+              {m.role === 'ai' && (
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>🤖</div>
+              )}
+              <div className={`chat-bubble ${m.role}`}>
+                {m.text.split('\n').map((line, j) => (
+                  <div key={j} style={{ marginBottom: line === '' ? 8 : 0 }}>
+                    {line.includes('**') ? (
+                      <span dangerouslySetInnerHTML={{ __html: line.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--accent)">$1</strong>') }} />
+                    ) : line.match(/^\d+\./) ? (
+                      <span style={{ color: m.role === 'ai' ? 'var(--text)' : 'rgba(255,255,255,0.9)' }}>{line}</span>
+                    ) : line}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          {typing && (
+            <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>🤖</div>
+              <div className="chat-bubble ai">
+                <div className="loading-dots" style={{ display: 'flex', gap: 4 }}>
+                  <span /><span /><span />
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+            {['Explain with example','Show me code','Give me a quiz','What\'s next?'].map(s => (
+              <button key={s} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', borderRadius: 20, padding: '4px 12px', fontSize: 12, color: 'var(--muted)', cursor: 'pointer' }} onClick={() => setInput(s)}>{s}</button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && sendMessage()}
+              placeholder="Ask me anything about coding, math, or any subject... 🤔" style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px', color: 'var(--text)', fontSize: 14 }} />
+            <button className="btn btn-primary" onClick={sendMessage} style={{ flexShrink: 0 }}>
+              <i className="fa fa-paper-plane" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// CODE EDITOR
+// ═══════════════════════════════════════
+const CodeEditorPage = ({ showXP }) => {
+  const [lang, setLang] = useState('python');
+  const [code, setCode] = useState(CODE_TEMPLATES.python);
+  const [output, setOutput] = useState('');
+  const [running, setRunning] = useState(false);
+
+  const runCode = () => {
+    setRunning(true);
+    setTimeout(() => {
+      const outputs = {
+        python: 'Hello, Learner! Welcome to LearnQuest AI 🚀\nSum of [1, 2, 3, 4, 5] = 15\n\n✅ Code executed successfully!\n⏱ Time: 0.023s | 🧠 Memory: 8.4 MB',
+        javascript: 'Shiva Kumar | Level 22 | 9640 XP\n\n✅ Code executed successfully!\n⏱ Time: 0.018s | 🧠 Memory: 12.1 MB',
+        c: 'Fibonacci Series:\nF(0) = 0\nF(1) = 1\nF(2) = 1\nF(3) = 2\nF(4) = 3\nF(5) = 5\nF(6) = 8\nF(7) = 13\nF(8) = 21\n\n✅ Code executed successfully!\n⏱ Time: 0.008s | 🧠 Memory: 4.2 MB',
+      };
+      setOutput(outputs[lang] || '✅ Code ran successfully!');
+      setRunning(false);
+      showXP(30, 'Code executed successfully!');
+    }, 1200);
+  };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>💻 Code Playground</h1>
+          <p style={{ color: 'var(--muted)', fontSize: 14 }}>Write, run, and experiment with code in the browser</p>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <select value={lang} onChange={e => { setLang(e.target.value); setCode(CODE_TEMPLATES[e.target.value] || CODE_TEMPLATES.python); }}
+            style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 12px', color: 'var(--text)', fontSize: 14, cursor: 'pointer' }}>
+            <option value="python">Python 🐍</option>
+            <option value="javascript">JavaScript ⚡</option>
+            <option value="c">C Programming ⚙️</option>
+          </select>
+          <button className="btn btn-success" onClick={runCode} disabled={running}>
+            {running ? <><span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⏳</span> Running...</> : <><i className="fa fa-play" /> Run Code</>}
+          </button>
+          <button className="btn btn-ghost btn-sm"><i className="fa fa-save" /> Save</button>
+          <button className="btn btn-ghost btn-sm"><i className="fa fa-share" /> Share</button>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, height: 'calc(100vh - 200px)' }}>
+        {/* Editor */}
+        <div className="card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#f87171' }} />
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#fbbf24' }} />
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#34d399' }} />
+            </div>
+            <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-code)' }}>main.{lang === 'javascript' ? 'js' : lang === 'python' ? 'py' : 'c'}</span>
+            <span className="badge badge-green" style={{ fontSize: 10 }}>●  Ready</span>
+          </div>
+          <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+            <div style={{ padding: '16px 8px', background: '#0d1117', color: 'var(--muted)', fontFamily: 'var(--font-code)', fontSize: 13, lineHeight: '24px', textAlign: 'right', minWidth: 40, userSelect: 'none' }}>
+              {code.split('\n').map((_,i) => <div key={i}>{i+1}</div>)}
+            </div>
+            <textarea value={code} onChange={e => setCode(e.target.value)} className="code-area"
+              style={{ flex: 1, border: 'none', borderRadius: 0, resize: 'none', lineHeight: '24px', outline: 'none', fontFamily: 'var(--font-code)', fontSize: 13 }} />
+          </div>
+        </div>
+
+        {/* Output */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="card" style={{ flex: 1, padding: 0, overflow: 'hidden' }}>
+            <div style={{ padding: '10px 16px', background: 'var(--bg2)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 13, fontWeight: 600 }}>📤 Output</span>
+              {output && <button style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: 12 }} onClick={() => setOutput('')}>Clear</button>}
+            </div>
+            <div style={{ padding: 16, fontFamily: 'var(--font-code)', fontSize: 13, lineHeight: 1.8, color: output.includes('✅') ? '#34d399' : 'var(--text)', minHeight: 200, whiteSpace: 'pre-wrap' }}>
+              {running ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--accent)' }}>
+                  <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⚙️</span> Executing code...
+                </div>
+              ) : output || <span style={{ color: 'var(--muted)' }}>Click "Run Code" to see output here...</span>}
+            </div>
+          </div>
+
+          {/* Quick snippets */}
+          <div className="card" style={{ padding: 16 }}>
+            <h4 style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>⚡ Quick Snippets</h4>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {['Hello World','Fibonacci','Bubble Sort','Recursion','List Comp'].map(s => (
+                <button key={s} className="badge badge-blue" style={{ cursor: 'pointer', fontSize: 11 }}>{s}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// QUIZ PAGE
+// ═══════════════════════════════════════
+const QuizPage = ({ showXP }) => {
+  const [qIdx, setQIdx] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [answered, setAnswered] = useState(false);
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+  const [time, setTime] = useState(30);
+  const [difficulty, setDifficulty] = useState('medium');
+  const q = QUIZ_QUESTIONS[qIdx];
+
+  useEffect(() => {
+    if (done || answered) return;
+    const t = setInterval(() => {
+      setTime(p => {
+        if (p <= 1) { setAnswered(true); return 30; }
+        return p - 1;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [qIdx, done, answered]);
+
+  const answer = (idx) => {
+    if (answered) return;
+    setSelected(idx);
+    setAnswered(true);
+    if (idx === q.ans) { setScore(p => p + 1); showXP(50, 'Correct answer! +50 XP'); }
+  };
+
+  const next = () => {
+    if (qIdx < QUIZ_QUESTIONS.length - 1) { setQIdx(p => p + 1); setSelected(null); setAnswered(false); setTime(30); }
+    else setDone(true);
+  };
+
+  if (done) return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 400, textAlign: 'center' }}>
+      <div style={{ fontSize: 80, marginBottom: 20 }} className="animate-victory">
+        {score >= 3 ? '🏆' : score >= 2 ? '🥈' : '📚'}
+      </div>
+      <h2 style={{ fontSize: 32, fontWeight: 700, marginBottom: 8 }}>Quiz Complete!</h2>
+      <div style={{ fontSize: 48, fontFamily: 'var(--font-display)', fontWeight: 900, color: score >= 3 ? 'var(--accent3)' : 'var(--accent)', marginBottom: 16 }}>
+        {score}/{QUIZ_QUESTIONS.length}
+      </div>
+      <div style={{ color: 'var(--muted)', marginBottom: 24 }}>{score >= 3 ? 'Excellent work! You really know your stuff! 🔥' : score >= 2 ? 'Good job! Keep practicing to improve!' : 'Keep learning — you\'ll get there! 💪'}</div>
+      <div style={{ display: 'flex', gap: 12 }}>
+        <button className="btn btn-primary" onClick={() => { setQIdx(0); setScore(0); setDone(false); setSelected(null); setAnswered(false); setTime(30); }}>Try Again</button>
+        <button className="btn btn-ghost">View Analysis</button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ maxWidth: 700, margin: '0 auto' }}>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 8 }}>
+        {['easy','medium','hard','expert'].map(d => (
+          <button key={d} className={`btn btn-sm ${difficulty === d ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setDifficulty(d)} style={{ textTransform: 'capitalize' }}>{d}</button>
+        ))}
+      </div>
+
+      <div className="card" style={{ padding: 32 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {QUIZ_QUESTIONS.map((_,i) => (
+              <div key={i} style={{ width: 32, height: 6, borderRadius: 3, background: i < qIdx ? 'var(--accent3)' : i === qIdx ? 'var(--accent)' : 'var(--border)' }} />
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', border: `3px solid ${time <= 10 ? 'var(--danger)' : 'var(--accent)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, color: time <= 10 ? 'var(--danger)' : 'var(--accent)', animation: time <= 10 ? 'pulse 0.5s infinite' : 'none' }}>{time}</div>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Q{qIdx + 1} of {QUIZ_QUESTIONS.length}</span>
+          </div>
+        </div>
+
+        <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 24, lineHeight: 1.5 }}>{q.q}</h2>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
+          {q.opts.map((opt, i) => (
+            <div key={i} className={`quiz-option ${answered ? (i === q.ans ? 'correct' : selected === i ? 'wrong' : '') : selected === i ? 'selected' : ''}`}
+              onClick={() => answer(i)}>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: answered ? (i === q.ans ? 'var(--accent3)' : selected === i ? 'var(--danger)' : 'var(--border)') : 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>
+                  {answered ? (i === q.ans ? '✓' : selected === i ? '✗' : String.fromCharCode(65+i)) : String.fromCharCode(65+i)}
+                </div>
+                {opt}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {answered && (
+          <div style={{ padding: 16, borderRadius: 10, background: selected === q.ans ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)', border: `1px solid ${selected === q.ans ? 'rgba(52,211,153,0.3)' : 'rgba(248,113,113,0.3)'}`, marginBottom: 20 }}>
+            <div style={{ fontWeight: 600, marginBottom: 4, color: selected === q.ans ? 'var(--accent3)' : 'var(--danger)' }}>
+              {selected === q.ans ? '✅ Correct! +50 XP' : '❌ Wrong!'}
+            </div>
+            <div style={{ fontSize: 13, color: 'var(--muted)' }}>{q.exp}</div>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <span className="badge badge-green">Score: {score}</span>
+            <span className="badge badge-blue">+{score * 50} XP</span>
+          </div>
+          {answered && <button className="btn btn-primary" onClick={next}>{qIdx < QUIZ_QUESTIONS.length - 1 ? 'Next Question →' : 'See Results 🏆'}</button>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════
+const LeaderboardPage = () => {
+  return (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>🏆 Global Leaderboard</h1>
+        <p style={{ color: 'var(--muted)' }}>Compete with learners worldwide. Top 3 get special rewards!</p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+        {[LEADERBOARD[1], LEADERBOARD[0], LEADERBOARD[2]].map((u, i) => {
+          const pos = [1, 0, 2][i]; const medal = ['🥈','🥇','🥉'][i];
+          return (
+            <div key={u.rank} className="card" style={{ padding: 24, textAlign: 'center', borderColor: ['rgba(148,163,184,0.4)','rgba(251,191,36,0.4)','rgba(251,146,60,0.4)'][i], order: [1,0,2][i], position: 'relative', overflow: 'hidden' }}>
+              {i === 1 && <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, var(--gold), #f59e0b)' }} />}
+              <div style={{ fontSize: 48, marginBottom: 8 }}>{medal}</div>
+              <div style={{ fontSize: 36, marginBottom: 4 }}>{u.avatar}</div>
+              <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 4 }}>{u.name}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 900, color: ['#94a3b8','var(--gold)','#fb923c'][i], marginBottom: 4 }}>{u.xp.toLocaleString()} XP</div>
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                <span className="badge badge-purple">Lv.{u.level}</span>
+                <span className="badge badge-red">🔥{u.streak}d</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="card" style={{ padding: 24 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {LEADERBOARD.map(u => (
+            <div key={u.rank} className={`rank-${u.rank <= 3 ? u.rank : ''} card`}
+              style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '14px 20px', background: u.isUser ? 'rgba(56,189,248,0.08)' : 'var(--card)', border: `1px solid ${u.isUser ? 'rgba(56,189,248,0.4)' : 'var(--border)'}` }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, width: 32, textAlign: 'center', color: ['','var(--gold)','#94a3b8','#fb923c'][u.rank] || 'var(--muted)' }}>
+                {u.rank <= 3 ? ['🥇','🥈','🥉'][u.rank-1] : `#${u.rank}`}
+              </div>
+              <div style={{ fontSize: 28 }}>{u.avatar}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, fontSize: 14 }}>{u.name}{u.isUser && <span className="badge badge-blue" style={{ marginLeft: 8, fontSize: 9 }}>YOU</span>}</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>🔥 {u.streak} day streak</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: 'var(--accent)' }}>{u.xp.toLocaleString()}</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>XP</div>
+              </div>
+              <span className="badge badge-purple">Lv.{u.level}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// ROADMAP PAGE
+// ═══════════════════════════════════════
+const RoadmapPage = ({ showXP }) => {
+  const [selected, setSelected] = useState('Web Developer');
+  const roadmap = ROADMAPS[selected];
+  const [unlocked, setUnlocked] = useState(3);
+
+  return (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>🗺️ AI Learning Roadmaps</h1>
+        <p style={{ color: 'var(--muted)' }}>AI-generated personalized learning paths for your dream career</p>
+      </div>
+
+      <div style={{ display: 'flex', gap: 10, marginBottom: 28, flexWrap: 'wrap' }}>
+        {Object.keys(ROADMAPS).map(r => (
+          <button key={r} className={`btn btn-sm ${selected === r ? 'btn-primary' : 'btn-ghost'}`} onClick={() => { setSelected(r); setUnlocked(3); }}>{r}</button>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20 }}>
+        <div>
+          {roadmap.map((step, i) => (
+            <div key={i} className="roadmap-node" style={{ marginBottom: i < roadmap.length - 1 ? 0 : 0, paddingBottom: 32, paddingLeft: 60, position: 'relative' }}>
+              <div style={{ position: 'absolute', left: 12, top: 12, width: 24, height: 24, borderRadius: '50%', background: i < unlocked ? 'linear-gradient(135deg, var(--accent), var(--accent2))' : 'var(--bg3)', border: `2px solid ${i < unlocked ? 'var(--accent)' : 'var(--border)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, zIndex: 2, fontWeight: 700 }}>
+                {i < unlocked ? '✓' : i + 1}
+              </div>
+              <div className={`card ${i >= unlocked ? 'opacity-50' : ''}`} style={{ padding: 20, opacity: i >= unlocked ? 0.5 : 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div>
+                    <div style={{ fontWeight: 600, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      {step}
+                      {i < unlocked && <span className="badge badge-green" style={{ fontSize: 10 }}>✓ Completed</span>}
+                      {i === unlocked && <span className="badge badge-blue" style={{ fontSize: 10 }}>Current</span>}
+                      {i > unlocked && <span className="badge" style={{ fontSize: 10, background: 'rgba(255,255,255,0.05)', color: 'var(--muted)', border: '1px solid var(--border)' }}>🔒 Locked</span>}
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>Phase {i + 1} • Estimated 2-3 weeks</div>
+                  </div>
+                  {i === unlocked && (
+                    <button className="btn btn-primary btn-sm" onClick={() => { setUnlocked(p => p + 1); showXP(100, `Completed: ${step}!`); }}>
+                      Start →
+                    </button>
+                  )}
+                </div>
+                {i < unlocked && (
+                  <div style={{ marginTop: 10 }}>
+                    <div className="progress-bar"><div className="progress-fill" style={{ width: '100%' }} /></div>
+                  </div>
+                )}
+                {i === unlocked && (
+                  <div style={{ marginTop: 10 }}>
+                    <div className="progress-bar"><div className="progress-fill" style={{ width: '35%' }} /></div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>35% complete</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="card" style={{ padding: 20 }}>
+            <h3 style={{ fontWeight: 600, marginBottom: 12 }}>📊 Path Overview</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {[['Duration','5-6 months'],['Lessons',roadmap.length * 6 + '+ lessons'],['Projects','8+ projects'],['Certificate','Yes'],['Difficulty','Intermediate']].map(([k,v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+                  <span style={{ color: 'var(--muted)' }}>{k}</span>
+                  <span style={{ fontWeight: 600 }}>{v}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 16 }}>
+              <div className="progress-bar" style={{ height: 8 }}>
+                <div className="progress-fill" style={{ width: `${(unlocked / roadmap.length) * 100}%` }} />
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{unlocked}/{roadmap.length} phases done</div>
+            </div>
+          </div>
+
+          <div className="card" style={{ padding: 20 }}>
+            <h3 style={{ fontWeight: 600, marginBottom: 12 }}>💼 Jobs After This Path</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {['Junior Developer','Full-Stack Engineer','Software Engineer','Tech Lead'].map(j => (
+                <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }} />
+                  {j}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// COMMUNITY
+// ═══════════════════════════════════════
+const CommunityPage = ({ showXP }) => {
+  const [posts, setPosts] = useState(COMMUNITY_POSTS);
+  const [newPost, setNewPost] = useState('');
+  const [posting, setPosting] = useState(false);
+
+  const like = (id) => {
+    setPosts(p => p.map(post => post.id === id ? { ...post, likes: post.likes + 1 } : post));
+    showXP(5, 'Post liked!');
+  };
+
+  const post = () => {
+    if (!newPost.trim()) return;
+    const np = { id: Date.now(), author: 'You', avatar: '⚡', time: 'Just now', content: newPost, likes: 0, comments: 0, tags: [] };
+    setPosts(p => [np, ...p]);
+    setNewPost('');
+    setPosting(false);
+    showXP(50, 'Posted in community! +50 XP');
+  };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>👥 Community</h1>
+          <p style={{ color: 'var(--muted)' }}>Learn together with 50,000+ students</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setPosting(!posting)}>
+          <i className="fa fa-pen" /> Share Something
+        </button>
+      </div>
+
+      {posting && (
+        <div className="card animate-fadeUp" style={{ padding: 20, marginBottom: 20 }}>
+          <textarea value={newPost} onChange={e => setNewPost(e.target.value)} placeholder="Share a tip, ask a question, or celebrate a win! 🎉"
+            style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)', borderRadius: 10, padding: 12, color: 'var(--text)', fontSize: 14, resize: 'none', minHeight: 100 }} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 12 }}>
+            <button className="btn btn-ghost btn-sm" onClick={() => setPosting(false)}>Cancel</button>
+            <button className="btn btn-primary btn-sm" onClick={post}>Post</button>
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {posts.map(p => (
+          <div key={p.id} className="card" style={{ padding: 24 }}>
+            <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{p.avatar}</div>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: 14 }}>{p.author}</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{p.time}</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 14, lineHeight: 1.7, marginBottom: 12 }}>{p.content}</p>
+            <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+              {p.tags.map(t => <span key={t} className="badge badge-blue" style={{ fontSize: 10 }}>{t}</span>)}
+            </div>
+            <div style={{ display: 'flex', gap: 16, fontSize: 13, color: 'var(--muted)' }}>
+              <button style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 13 }} onClick={() => like(p.id)}>
+                ❤️ {p.likes}
+              </button>
+              <button style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 13 }}>
+                💬 {p.comments}
+              </button>
+              <button style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 13 }}>
+                🔗 Share
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// ADVENTURE MODE
+// ═══════════════════════════════════════
+const AdventurePage = ({ showXP }) => {
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [health, setHealth] = useState(100);
+  const [bossHealth, setBossHealth] = useState(100);
+  const [battling, setBattling] = useState(false);
+  const [battleLog, setBattleLog] = useState([]);
+  const [won, setWon] = useState(false);
+
+  const levels = [
+    { id: 1, name: 'The Forest of Arrays', boss: 'Array Dragon', icon: '🐉', unlocked: true, reward: '500 XP + Rare Sword', topic: 'Arrays & Loops' },
+    { id: 2, name: 'Pointer Dungeon', boss: 'Pointer Phantom', icon: '👻', unlocked: currentLevel >= 2, reward: '800 XP + Shield', topic: 'Pointers & Memory' },
+    { id: 3, name: 'Recursion Tower', boss: 'Recursive Giant', icon: '🗼', unlocked: currentLevel >= 3, reward: '1200 XP + Crown', topic: 'Recursion' },
+    { id: 4, name: 'Algorithm Volcano', boss: 'Sort Demon', icon: '🌋', unlocked: currentLevel >= 4, reward: '2000 XP + Legend Badge', topic: 'Sorting Algorithms' },
+  ];
+
+  const attack = () => {
+    if (battling) return;
+    setBattling(true);
+    const dmg = Math.floor(Math.random() * 25) + 10;
+    const bossDmg = Math.floor(Math.random() * 20) + 5;
+    setBossHealth(p => Math.max(0, p - dmg));
+    setHealth(p => Math.max(0, p - bossDmg));
+    setBattleLog(p => [`⚔️ You dealt ${dmg} damage!`, `🔥 Boss attacked for ${bossDmg} damage!`, ...p.slice(0, 4)]);
+    
+    setTimeout(() => {
+      setBattling(false);
+      setBossHealth(prev => {
+        if (prev <= 0) { setWon(true); showXP(500, 'BOSS DEFEATED! Adventure Victory!'); }
+        return prev;
+      });
+    }, 500);
+  };
+
+  const resetBattle = () => { setBossHealth(100); setHealth(100); setWon(false); setBattleLog([]); setCurrentLevel(p => p + 1); showXP(200, 'Level cleared! Moving to next zone!'); };
+
+  return (
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>⚔️ Adventure Learning Mode</h1>
+        <p style={{ color: 'var(--muted)' }}>Fight AI bosses, complete coding missions, earn legendary rewards!</p>
+      </div>
+
+      {/* Map */}
+      <div className="card" style={{ padding: 24, marginBottom: 20, background: 'linear-gradient(135deg, rgba(56,189,248,0.05), rgba(167,139,250,0.05))' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+          {levels.map(lv => (
+            <div key={lv.id} onClick={() => lv.unlocked && setCurrentLevel(lv.id)}
+              className="card" style={{ padding: 20, textAlign: 'center', cursor: lv.unlocked ? 'pointer' : 'not-allowed', opacity: lv.unlocked ? 1 : 0.5, border: currentLevel === lv.id ? '2px solid var(--accent)' : '1px solid var(--border)', background: currentLevel === lv.id ? 'rgba(56,189,248,0.1)' : 'var(--card)', transition: 'all 0.3s' }}>
+              <div style={{ fontSize: 36, marginBottom: 8 }}>{lv.unlocked ? lv.icon : '🔒'}</div>
+              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Level {lv.id}</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>{lv.name}</div>
+              <span className="badge badge-blue" style={{ fontSize: 9 }}>{lv.topic}</span>
+              {currentLevel > lv.id && <div style={{ marginTop: 6 }}><span className="badge badge-green" style={{ fontSize: 9 }}>✓ Cleared</span></div>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Battle Arena */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+        <div className="card" style={{ padding: 24, background: 'linear-gradient(135deg, rgba(248,113,113,0.05), rgba(167,139,250,0.05))' }}>
+          <h3 style={{ fontWeight: 700, marginBottom: 20, textAlign: 'center' }}>⚔️ Battle Arena — {levels.find(l=>l.id===currentLevel)?.name}</h3>
+          
+          {won ? (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 60, marginBottom: 16 }} className="animate-victory">🏆</div>
+              <h3 style={{ color: 'var(--gold)', marginBottom: 8 }}>BOSS DEFEATED!</h3>
+              <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 12 }}>You earned: <strong style={{ color: 'var(--gold)' }}>{levels.find(l=>l.id===currentLevel)?.reward}</strong></p>
+              <button className="btn btn-gold" onClick={resetBattle}>Next Level →</button>
+            </div>
+          ) : health <= 0 ? (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 60, marginBottom: 16 }}>💀</div>
+              <h3 style={{ color: 'var(--danger)', marginBottom: 8 }}>DEFEATED!</h3>
+              <button className="btn btn-danger" onClick={() => { setHealth(100); setBossHealth(100); setBattleLog([]); }}>Retry</button>
+            </div>
+          ) : (
+            <>
+              {/* Player */}
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
+                  <span>⚡ You (Lv.22)</span>
+                  <span style={{ color: 'var(--accent3)' }}>{health}/100 HP</span>
+                </div>
+                <div className="progress-bar" style={{ height: 10 }}><div className="progress-fill-green progress-fill" style={{ width: `${health}%` }} /></div>
+              </div>
+
+              <div style={{ textAlign: 'center', padding: '20px 0', fontSize: 60 }}>{levels.find(l=>l.id===currentLevel)?.icon}</div>
+              <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--muted)', marginBottom: 8 }}>{levels.find(l=>l.id===currentLevel)?.boss}</div>
+
+              {/* Boss */}
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
+                  <span>👹 Boss</span>
+                  <span style={{ color: 'var(--danger)' }}>{bossHealth}/100 HP</span>
+                </div>
+                <div className="progress-bar" style={{ height: 10 }}><div className="progress-fill" style={{ width: `${bossHealth}%`, background: 'linear-gradient(90deg, var(--danger), #ef4444)' }} /></div>
+              </div>
+
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                <button className="btn btn-danger" onClick={attack} style={{ animation: battling ? 'shake 0.3s' : 'none' }}>⚔️ Attack</button>
+                <button className="btn btn-primary" onClick={() => { setHealth(p => Math.min(100, p + 20)); showXP(10, 'Used healing potion!'); }}>🧪 Heal</button>
+                <button className="btn btn-ghost" onClick={() => showXP(50, 'Used special ability!')}>✨ Special</button>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Battle Log + Mission */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="card" style={{ padding: 20, flex: 1 }}>
+            <h4 style={{ fontWeight: 600, marginBottom: 12 }}>📜 Battle Log</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontFamily: 'var(--font-code)', fontSize: 12 }}>
+              {battleLog.length === 0 ? <span style={{ color: 'var(--muted)' }}>Start the battle to see the action!</span> : battleLog.map((log, i) => (
+                <div key={i} style={{ color: log.includes('You') ? 'var(--accent3)' : 'var(--danger)', padding: '4px 8px', background: 'rgba(255,255,255,0.03)', borderRadius: 4 }}>{log}</div>
+              ))}
+            </div>
+          </div>
+          <div className="card" style={{ padding: 20 }}>
+            <h4 style={{ fontWeight: 600, marginBottom: 12 }}>🎯 Zone Mission</h4>
+            <div style={{ fontSize: 13, marginBottom: 8 }}>Answer a coding question to deal 2x damage!</div>
+            <div style={{ padding: 12, background: 'var(--bg2)', borderRadius: 8, fontSize: 12, fontFamily: 'var(--font-code)', marginBottom: 12 }}>
+              Q: What is the time complexity of array access?
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {['O(n)','O(1)','O(log n)','O(n²)'].map(a => (
+                <button key={a} onClick={() => { if (a === 'O(1)') { setBossHealth(p => Math.max(0, p - 40)); showXP(100, 'Correct! 2x damage dealt!'); setBattleLog(p => ['💥 CRITICAL HIT! 40 damage!', ...p]); } else setBattleLog(p => ['❌ Wrong answer!', ...p]); }}
+                  className="badge badge-blue" style={{ cursor: 'pointer', padding: '6px 12px', fontSize: 12 }}>{a}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// ACHIEVEMENTS PAGE
+// ═══════════════════════════════════════
+const AchievementsPage = () => (
+  <div>
+    <div style={{ marginBottom: 24 }}>
+      <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>🏅 Achievements</h1>
+      <p style={{ color: 'var(--muted)' }}>Unlock badges and prove your mastery</p>
+    </div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+      {ACHIEVEMENTS.map(a => (
+        <div key={a.id} className="card" style={{ padding: 24, textAlign: 'center', opacity: a.unlocked ? 1 : 0.5, borderColor: a.unlocked ? 'rgba(251,191,36,0.4)' : 'var(--border)' }}>
+          <div style={{ fontSize: 48, marginBottom: 12, filter: a.unlocked ? 'none' : 'grayscale(1)' }}>{a.unlocked ? a.icon : '🔒'}</div>
+          <div style={{ fontWeight: 700, marginBottom: 4 }}>{a.name}</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>{a.desc}</div>
+          {a.unlocked && <span className="badge badge-gold">Unlocked ✓</span>}
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════
+// SETTINGS PAGE
+// ═══════════════════════════════════════
+const SettingsPage = ({ darkMode, setDarkMode }) => {
+  const [notifs, setNotifs] = useState(true);
+  const [sounds, setSounds] = useState(true);
+  const [language, setLanguage] = useState('English');
+  return (
+    <div style={{ maxWidth: 640 }}>
+      <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 24 }}>⚙️ Settings</h1>
+      {[
+        { label: 'Dark Mode', desc: 'Switch between dark and light theme', val: darkMode, set: setDarkMode },
+        { label: 'Notifications', desc: 'Get updates about your progress', val: notifs, set: setNotifs },
+        { label: 'Sound Effects', desc: 'Play sounds during activities', val: sounds, set: setSounds },
+      ].map(s => (
+        <div key={s.label} className="card" style={{ padding: 20, marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontWeight: 600, marginBottom: 2 }}>{s.label}</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>{s.desc}</div>
+          </div>
+          <div className={`switch ${s.val ? 'on' : ''}`} onClick={() => s.set(p => !p)} />
+        </div>
+      ))}
+      <div className="card" style={{ padding: 20, marginBottom: 12 }}>
+        <div style={{ fontWeight: 600, marginBottom: 8 }}>Language</div>
+        <select value={language} onChange={e => setLanguage(e.target.value)} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 12px', color: 'var(--text)', width: '100%' }}>
+          {['English','Hindi','Telugu','Tamil','Kannada'].map(l => <option key={l}>{l}</option>)}
+        </select>
+      </div>
+      <div className="card" style={{ padding: 20, borderColor: 'rgba(248,113,113,0.3)' }}>
+        <div style={{ fontWeight: 600, marginBottom: 4, color: 'var(--danger)' }}>Danger Zone</div>
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>These actions are irreversible</div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn btn-danger btn-sm">Reset Progress</button>
+          <button className="btn btn-ghost btn-sm" style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }}>Delete Account</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════
+const App = () => {
+  const [page, setPage] = useState('hero');
+  const [activePage, setActivePage] = useState('dashboard');
+  const [darkMode, setDarkMode] = useState(true);
+  const [userXP, setUserXP] = useState(9640);
+  const [xpNotif, setXpNotif] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.className = darkMode ? '' : 'light';
+  }, [darkMode]);
+
+  const showXP = (amount, message) => {
+    setUserXP(p => p + amount);
+    setXpNotif({ amount, message });
+    setTimeout(() => setXpNotif(null), 4000);
+  };
+
+  const navigate = (p) => {
+    if (p === 'login') { setPage('login'); return; }
+    if (p === 'dashboard') { setPage('app'); return; }
+    setPage(p);
+  };
+
+  const navItems = [
+    { id: 'dashboard', icon: 'fa-home', label: 'Dashboard' },
+    { id: 'subjects', icon: 'fa-book', label: 'Subjects' },
+    { id: 'ai-chat', icon: 'fa-robot', label: 'AI Tutor' },
+    { id: 'code', icon: 'fa-code', label: 'Code Editor' },
+    { id: 'quiz', icon: 'fa-question-circle', label: 'Quiz' },
+    { id: 'roadmap', icon: 'fa-map', label: 'Roadmap' },
+    { id: 'adventure', icon: 'fa-gamepad', label: 'Adventure Mode' },
+    { id: 'leaderboard', icon: 'fa-trophy', label: 'Leaderboard' },
+    { id: 'community', icon: 'fa-users', label: 'Community' },
+    { id: 'achievements', icon: 'fa-medal', label: 'Achievements' },
+    { id: 'settings', icon: 'fa-cog', label: 'Settings' },
+  ];
+
+  if (page === 'hero') return (
+    <>
+      <HeroSection onNavigate={navigate} />
+      {xpNotif && <XPNotification xp={xpNotif.amount} message={xpNotif.message} onDone={() => setXpNotif(null)} />}
+    </>
+  );
+  if (page === 'login') return (
+    <>
+      <LoginPage onNavigate={navigate} />
+      {xpNotif && <XPNotification xp={xpNotif.amount} message={xpNotif.message} onDone={() => setXpNotif(null)} />}
+    </>
+  );
+
+  return (
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      {/* Sidebar */}
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        {/* Top XP bar */}
+        <div className="xp-bar" />
+        {/* Logo */}
+        <div style={{ padding: '16px 24px 8px', marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>⚡</div>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, letterSpacing: 0.5 }} className="grad-text">LearnQuest AI</span>
+          </div>
+        </div>
+
+        {/* User */}
+        <div style={{ padding: '12px 24px', marginBottom: 16, borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent3), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>⚡</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 600 }}>Shiva Sai Ram</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>Level 22 • {userXP.toLocaleString()} XP</div>
+            </div>
+            <div style={{ fontSize: 18 }}>🔥</div>
+          </div>
+          <div className="progress-bar" style={{ marginTop: 8 }}>
+            <div className="progress-fill" style={{ width: `${(userXP % 10000) / 100}%` }} />
+          </div>
+        </div>
+
+        {/* Nav */}
+        <div className="scrollable" style={{ flex: 1, padding: '0 0 16px' }}>
+          {navItems.map(item => (
+            <div key={item.id} className={`sidebar-item ${activePage === item.id ? 'active' : ''}`} onClick={() => { setActivePage(item.id); setSidebarOpen(false); }}>
+              <i className={`fa ${item.icon}`} />
+              <span>{item.label}</span>
+              {item.id === 'adventure' && <span className="badge badge-red" style={{ fontSize: 9, marginLeft: 'auto' }}>NEW</span>}
+              {item.id === 'ai-chat' && <span className="badge badge-green" style={{ fontSize: 9, marginLeft: 'auto' }}>●</span>}
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom */}
+        <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>Daily Goal</div>
+              <div className="progress-bar" style={{ marginTop: 4 }}><div className="progress-fill" style={{ width: '70%' }} /></div>
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 600 }}>70%</div>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: 'var(--muted)', cursor: 'pointer' }} onClick={() => setPage('hero')}>
+            <i className="fa fa-arrow-left" style={{ marginRight: 6 }} />Back to Home
+          </div>
+        </div>
+      </div>
+
+      {/* Main */}
+      <div className="main-content">
+        {/* Top bar */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, position: 'sticky', top: 0, zIndex: 50, background: 'var(--bg)', paddingTop: 4, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button onClick={() => setSidebarOpen(p => !p)} style={{ display: 'none', background: 'none', border: 'none', fontSize: 20, color: 'var(--text)', cursor: 'pointer' }} className="mobile-menu-btn">☰</button>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: 'var(--muted)' }}>
+              {navItems.find(n => n.id === activePage)?.label}
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: 'rgba(251,191,36,0.1)', borderRadius: 20, border: '1px solid rgba(251,191,36,0.3)' }}>
+              <span style={{ fontSize: 14 }}>🪙</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: 'var(--gold)' }}>2,840</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: 'rgba(56,189,248,0.1)', borderRadius: 20, border: '1px solid rgba(56,189,248,0.3)' }}>
+              <span style={{ fontSize: 14 }}>⚡</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: 'var(--accent)' }}>{userXP.toLocaleString()}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: 'rgba(248,113,113,0.1)', borderRadius: 20, border: '1px solid rgba(248,113,113,0.3)' }}>
+              <span style={{ fontSize: 14 }}>🔥</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 700, color: 'var(--danger)' }}>21</span>
+            </div>
+            <button style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer' }} onClick={() => setDarkMode(p => !p)}>
+              {darkMode ? '☀️' : '🌙'}
+            </button>
+          </div>
+        </div>
+
+        {/* Page Content */}
+        <div className="animate-fadeUp">
+          {activePage === 'dashboard' && <Dashboard userXP={userXP} setUserXP={setUserXP} showXP={showXP} />}
+          {activePage === 'subjects' && <SubjectsPage showXP={showXP} />}
+          {activePage === 'ai-chat' && <AIChatPage showXP={showXP} />}
+          {activePage === 'code' && <CodeEditorPage showXP={showXP} />}
+          {activePage === 'quiz' && <QuizPage showXP={showXP} />}
+          {activePage === 'roadmap' && <RoadmapPage showXP={showXP} />}
+          {activePage === 'adventure' && <AdventurePage showXP={showXP} />}
+          {activePage === 'leaderboard' && <LeaderboardPage />}
+          {activePage === 'community' && <CommunityPage showXP={showXP} />}
+          {activePage === 'achievements' && <AchievementsPage />}
+          {activePage === 'settings' && <SettingsPage darkMode={darkMode} setDarkMode={setDarkMode} />}
+        </div>
+      </div>
+
+      {/* XP Notification */}
+      {xpNotif && <XPNotification xp={xpNotif.amount} message={xpNotif.message} onDone={() => setXpNotif(null)} />}
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
